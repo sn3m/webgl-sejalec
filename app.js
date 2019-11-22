@@ -1,177 +1,90 @@
-import * as WebGL from './WebGL.js';
-import shaders from './shaders.js';
+import Application from './Application.js';
 
-class Application {
-
-    constructor(canvas) {
-        this._update = this._update.bind(this);
-
-        this.canvas = canvas;
-        this._initGL();
-        this.start();
-
-        requestAnimationFrame(this._update);
-    }
-
-    _initGL() {
-        // Try to create a WebGL 2.0 context.
-        // We need both a try-catch and a null check.
-        this.gl = null;
-        try {
-            this.gl = this.canvas.getContext('webgl2', {
-                // options, such as disabling the depth buffer
-            });
-        } catch (error) {
-        }
-
-        if (!this.gl) {
-            console.log('Cannot create WebGL 2.0 context');
-        }
-    }
-
-    _update() {
-        this._resize();
-        this.update();
-        this.render();
-        requestAnimationFrame(this._update);
-    }
-
-    _resize() {
-        // Check for resize on RAF, because elements do not
-        // trigger a resize event. Windows do, but it might
-        // not change the size of the canvas.
-        const canvas = this.canvas;
-        const gl = this.gl;
-
-        if (canvas.width !== canvas.clientWidth ||
-            canvas.height !== canvas.clientHeight)
-        {
-            canvas.width = canvas.clientWidth;
-            canvas.height = canvas.clientHeight;
-
-            // Change the drawing region to reflect the canvas size.
-            gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-
-            this.resize();
-        }
-    }
-
-    start() {
-        // initialization code (including event handler binding)
-    }
-
-    update() {
-        // update code (input, animations, AI ...)
-    }
-
-    render() {
-        // render code (gl API calls)
-
-        const gl = this.gl;
-        gl.clearColor(0.3, 0.4, 0.9, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-    }
-
-    resize() {
-        // resize code (e.g. update projection matrix)
-    }
-
-}
+import Renderer from './Renderer.js';
+import Physics from './Physics.js';
+import Camera from './Camera.js';
+import SceneLoader from './SceneLoader.js';
+import SceneBuilder from './SceneBuilder.js';
 
 class App extends Application {
 
     start() {
         const gl = this.gl;
 
-        // this.programs now contains a program object and attribute and
-        // uniform locations for each of the supplied shaders.
-        this.programs = WebGL.buildPrograms(gl, shaders);
+        this.renderer = new Renderer(gl);
+        this.time = Date.now();
+        this.startTime = this.time;
+        this.aspect = 1;
 
-        // Triangle vertices. They have to be stored in a typed array
-        // to be properly transferred to the GPU memory.
-        const vertices = new Float32Array([
-             0.0,  0.5,
-            -0.5, -0.5,
-             0.5, -0.5
-        ]);
+        this.pointerlockchangeHandler = this.pointerlockchangeHandler.bind(this);
+        document.addEventListener('pointerlockchange', this.pointerlockchangeHandler);
 
-        // Create a buffer object to represent a chunk of GPU memory.
-        this.vertexBuffer = gl.createBuffer();
+        this.load('scene.json');
+    }
 
-        // Bind the buffer to the ARRAY_BUFFER target.
-        // Every subsequent operation on that target will affect
-        // the currently bound buffer.
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
+    async load(uri) {
+        const scene = await new SceneLoader().loadScene('scene.json');
+        const builder = new SceneBuilder(scene);
+        this.scene = builder.build();
+        this.physics = new Physics(this.scene);
 
-        // Transfer the data from the main memory to the GPU memory.
-        // The STATIC_DRAW hint tells WebGL that we are going to modify
-        // the data rarely and access it from a shader often.
-        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+        // Find first camera.
+        this.camera = null;
+        this.scene.traverse(node => {
+            if (node instanceof Camera) {
+                this.camera = node;
+            }
+        });
 
-        // Repeat for color data.
-        const colors = new Float32Array([
-            1, 0, 0, 1,
-            0, 1, 0, 1,
-            0, 0, 1, 1
-        ]);
+        this.camera.aspect = this.aspect;
+        this.camera.updateProjection();
+        this.renderer.prepare(this.scene);
+    }
 
-        this.colorBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
+    enableCamera() {
+        this.canvas.requestPointerLock();
+    }
 
-        this.offsetX = 0;
-        this.offsetY = 0;
+    pointerlockchangeHandler() {
+        if (!this.camera) {
+            return;
+        }
+
+        if (document.pointerLockElement === this.canvas) {
+            this.camera.enable();
+        } else {
+            this.camera.disable();
+        }
+    }
+
+    update() {
+        const t = this.time = Date.now();
+        const dt = (this.time - this.startTime) * 0.001;
+        this.startTime = this.time;
+
+        if (this.camera) {
+            this.camera.update(dt);
+        }
+
+        if (this.physics) {
+            this.physics.update(dt);
+        }
     }
 
     render() {
-        const gl = this.gl;
+        if (this.scene) {
+            this.renderer.render(this.scene, this.camera);
+        }
+    }
 
-        // First, clear the screen. We do not want pixels
-        // from the previous frame to be visible.
-        gl.clearColor(1, 1, 1, 1);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-
-        // Select the correct program to use for rendering.
-        const program = this.programs.test;
-        gl.useProgram(program.program);
-
-        // Bind the buffer first, because vertexAttribPointer
-        // associates an attribute with the bound buffer.
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
-
-        // Tell WebGL that the data comes from a buffer.
-        // Back in the day this was an OpenGL extension, now it is mandatory.
-        gl.enableVertexAttribArray(program.attributes.aPosition);
-
-        // Connect the buffer and the attribute and specify how to extract
-        // the data from the buffer.
-        // The attribute aPosition is of type vec2 and we have two floats
-        // per vertex in the buffer. The data is tightly packed,
-        // so let WebGL compute the stride and offset.
-        gl.vertexAttribPointer(
-            program.attributes.aPosition, // attribute location
-            2, // number of components per attribute
-            gl.FLOAT, // the type of each component
-            false, // should integers be normalized when cast to a float
-            0, // stride (ignore for now)
-            0, // offset (ignore for now)
-        );
-
-        // Repeat for color data
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
-        gl.enableVertexAttribArray(program.attributes.aColor);
-        gl.vertexAttribPointer(program.attributes.aColor, 4, gl.FLOAT, false, 0, 0);
-
-
-        // Set all uniforms. Uniform values are program state, so they do not
-        // need to be set again when switching to a different program and
-        // then switching back.
-        // The uniform uOffset is of type vec2 so we pass in two floats (2f).
-        gl.uniform2f(program.uniforms.uOffset, this.offsetX, this.offsetY);
-
-        // Draw! We are drawing triangles, passing in 3 vertices
-        // and starting with the vertex at index 0.
-        gl.drawArrays(gl.TRIANGLES, 0, 3);
+    resize() {
+        const w = this.canvas.clientWidth;
+        const h = this.canvas.clientHeight;
+        this.aspect = w / h;
+        if (this.camera) {
+            this.camera.aspect = this.aspect;
+            this.camera.updateProjection();
+        }
     }
 
 }
@@ -179,7 +92,6 @@ class App extends Application {
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.querySelector('canvas');
     const app = new App(canvas);
-    // const gui = new dat.GUI();
-    // gui.add(app, 'offsetX', -1, 1);
-    // gui.add(app, 'offsetY', -1, 1);
+    const gui = new dat.GUI();
+    gui.add(app, 'enableCamera');
 });
