@@ -12,6 +12,8 @@ export default class Camera extends Node {
 
         this.projection = mat4.create();
         this.updateProjection();
+        
+        this.keys={};
     }
 
     updateProjection() {
