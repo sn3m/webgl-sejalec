@@ -53,6 +53,42 @@
       "translation": [3, 0.1, -1],
       "rotation": [0, 1, 0],
       "scale": [1, 0.1, 1]
+    },
+    {
+      "type": "model",
+      "mesh": 2,
+      "texture": 1,
+      "aabb": {
+        "min": [-0.3, -0.1, -0.3],
+        "max": [0.3, 0.1, 0.3]
+      },
+      "translation": [1, 0, 1],
+      "rotation": [0, 1, 0],
+      "scale": [0.3, 0.3, 0.3]
+    },
+    {
+      "type": "model",
+      "mesh": 2,
+      "texture": 1,
+      "aabb": {
+        "min": [-0.3, -0.1, -0.3],
+        "max": [0.3, 0.1, 0.3]
+      },
+      "translation": [3, 0, 1],
+      "rotation": [0, 1, 0],
+      "scale": [0.3, 0.3, 0.3]
+    },
+    {
+      "type": "model",
+      "mesh": 2,
+      "texture": 1,
+      "aabb": {
+        "min": [-0.3, -0.1, -0.3],
+        "max": [0.3, 0.1, 0.3]
+      },
+      "translation": [2, 0, 1],
+      "rotation": [0, 1, 0],
+      "scale": [0.3, 0.3, 0.3]
     }
   ],
   "textures": [
@@ -61,6 +97,7 @@
   ],
   "meshes": [
     "./assets/models/cube.json",
-    "./assets/models/pyramid.json"
+    "./assets/models/pyramid.json",
+    "./assets/models/roza.json"
   ]
 }
