@@ -39,5 +39,5 @@ Camera.defaults = {
     maxSpeed         : 3,
     friction         : 0.2,
     acceleration     : 20,
-    collidable       : false
+    ignoreCollision  : true
 };
