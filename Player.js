@@ -62,8 +62,7 @@ export default class Player extends Node {
             vec3.scale(c.velocity, c.velocity, c.maxSpeed / len);
         }
 
-        // var t = vec3.clone(this.translation);
-        // vec3.add(this.camera.translation, t, vec3.set(vec3.create(), 0,1,-1));
+        this.camera.velocity = vec3.clone(c.velocity);
     }
 
     enable() {
