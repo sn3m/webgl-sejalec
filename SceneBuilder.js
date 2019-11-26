@@ -3,6 +3,7 @@ import Mesh from './Mesh.js';
 import Node from './Node.js';
 import Model from './Model.js';
 import Camera from './Camera.js';
+import Player from './Player.js';
 
 import Scene from './Scene.js';
 
@@ -19,6 +20,12 @@ export default class SceneBuilder {
                 const mesh = new Mesh(this.spec.meshes[spec.mesh]);
                 const texture = this.spec.textures[spec.texture];
                 return new Model(mesh, texture, spec);
+            }
+            case 'player' : {
+                const mesh = new Mesh(this.spec.meshes[spec.mesh]);
+                const texture = this.spec.textures[spec.texture];
+                console.log(mesh.texcoords);
+                return new Player(mesh, texture, spec);
             }
             default: return new Node(spec);
         }

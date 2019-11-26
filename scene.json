@@ -13,7 +13,7 @@
       "far": 100
     },
     {
-      "type": "model",
+      "type": "player",
       "mesh": 1,
       "texture": 1,
       "aabb": {
