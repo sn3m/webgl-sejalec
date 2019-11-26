@@ -13,7 +13,6 @@ export default class Player extends Node {
         this.mesh = mesh;
         this.image = image;
 
-        this.camera = null;
 
         this.mousemoveHandler = this.mousemoveHandler.bind(this);
         this.keydownHandler = this.keydownHandler.bind(this);
@@ -62,7 +61,6 @@ export default class Player extends Node {
             vec3.scale(c.velocity, c.velocity, c.maxSpeed / len);
         }
 
-        this.camera.velocity = vec3.clone(c.velocity);
     }
 
     enable() {

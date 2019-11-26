@@ -38,5 +38,6 @@ Camera.defaults = {
     mouseSensitivity : 0.002,
     maxSpeed         : 3,
     friction         : 0.2,
-    acceleration     : 20
+    acceleration     : 20,
+    collidable       : false
 };

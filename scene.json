@@ -1,18 +1,6 @@
 {
   "nodes": [
     {
-      "type": "camera",
-      "translation": [0, 1, 0],
-      "aabb": {
-        "min": [-0.2, -0.2, -0.2],
-        "max": [0.2, 0.2, 0.2]
-      },
-      "aspect": 1,
-      "fov": 1.5,
-      "near": 0.01,
-      "far": 100
-    },
-    {
       "type": "player",
       "mesh": 1,
       "texture": 1,
@@ -20,8 +8,22 @@
         "min": [-0.5, -0.5, -0.5],
         "max": [0.5, 0.5, 0.5]
       },
-      "translation": [0, 1, -1],
-      "scale": [1, 1, 1]
+      "translation": [0, 1, 0],
+      "scale": [1, 1, 1],
+      "children": [
+        {
+          "type": "camera",
+          "translation": [0, 0, 1],
+          "aabb": {
+            "min": [0, 0, 0],
+            "max": [0, 0, 0]
+          },
+          "aspect": 1,
+          "fov": 1.5,
+          "near": 0.01,
+          "far": 100
+        }
+      ]
     },
     {
       "type": "model",

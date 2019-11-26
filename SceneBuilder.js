@@ -15,7 +15,7 @@ export default class SceneBuilder {
 
     createNode(spec) {
         switch (spec.type) {
-            case 'camera': return new Camera(spec);
+            //case 'camera': return new Camera(spec);
             case 'model': {
                 const mesh = new Mesh(this.spec.meshes[spec.mesh]);
                 const texture = this.spec.textures[spec.texture];
@@ -24,8 +24,9 @@ export default class SceneBuilder {
             case 'player' : {
                 const mesh = new Mesh(this.spec.meshes[spec.mesh]);
                 const texture = this.spec.textures[spec.texture];
-                console.log(mesh.texcoords);
-                return new Player(mesh, texture, spec);
+                let player = new Player(mesh, texture, spec);
+                player.addChild(new Camera(spec.children[0]))
+                return player;
             }
             default: return new Node(spec);
         }

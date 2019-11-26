@@ -33,17 +33,14 @@ class App extends Application {
         this.camera = null;
         this.player = null;
         this.scene.traverse(node => {
-            if (node instanceof Camera) {
-                this.camera = node;
-            } else if (node instanceof Player) {
+            if (node instanceof Player) {
                 this.player = node;
             }
         });
 
-
+        this.camera = this.player.children[0];
         this.camera.aspect = this.aspect;
         this.camera.updateProjection();
-        this.player.camera = this.camera;
         this.renderer.prepare(this.scene);
     }
 

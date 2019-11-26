@@ -1,5 +1,3 @@
-import Player from "./Player.js";
-
 const vec3 = glMatrix.vec3;
 const mat4 = glMatrix.mat4;
 
@@ -15,7 +13,7 @@ export default class Physics {
                 vec3.scaleAndAdd(node.translation, node.translation, node.velocity, dt);
                 node.updateTransform();
                 this.scene.traverse(other => {
-                    if (node !== other && node.type !== "camera" && other.type !== "camera") {
+                    if (node !== other && node.collidable && other.collidable) {
                         this.resolveCollision(node, other);
                     }
                 });
@@ -93,10 +91,6 @@ export default class Physics {
         vec3.add(a.translation, a.translation, minDirection);
         a.updateTransform();
 
-        if(a instanceof Player) {
-            vec3.add(a.camera.translation, a.camera.translation, minDirection);
-            a.camera.updateTransform();
-        }
     }
 
 }
