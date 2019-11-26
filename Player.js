@@ -13,6 +13,8 @@ export default class Player extends Node {
         this.mesh = mesh;
         this.image = image;
 
+        this.camera = null;
+
         this.mousemoveHandler = this.mousemoveHandler.bind(this);
         this.keydownHandler = this.keydownHandler.bind(this);
         this.keyupHandler = this.keyupHandler.bind(this);
@@ -59,6 +61,9 @@ export default class Player extends Node {
         if (len > c.maxSpeed) {
             vec3.scale(c.velocity, c.velocity, c.maxSpeed / len);
         }
+
+        // var t = vec3.clone(this.translation);
+        // vec3.add(this.camera.translation, t, vec3.set(vec3.create(), 0,1,-1));
     }
 
     enable() {

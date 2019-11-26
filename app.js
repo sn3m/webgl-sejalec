@@ -43,6 +43,7 @@ class App extends Application {
                 this.player = node;
             }
         });
+        this.player.camera = this.camera;
 
         this.camera.aspect = this.aspect;
         this.camera.updateProjection();
