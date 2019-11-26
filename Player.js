@@ -1,11 +1,22 @@
+import Utils from './Utils.js';
 import Node from './Node.js';
+
+const mat4 = glMatrix.mat4;
+const vec3 = glMatrix.vec3;
 
 export default class Player extends Node {
 
     constructor(mesh, image, options) {
         super(options);
+        Utils.init(this, this.constructor.defaults, options);
+
         this.mesh = mesh;
         this.image = image;
+
+        this.mousemoveHandler = this.mousemoveHandler.bind(this);
+        this.keydownHandler = this.keydownHandler.bind(this);
+        this.keyupHandler = this.keyupHandler.bind(this);
+        this.keys = {};
     }
 
     update(dt) {
@@ -66,7 +77,6 @@ export default class Player extends Node {
         }
     }
 
-    /*
     mousemoveHandler(e) {
         const dx = e.movementX;
         const dy = e.movementY;
@@ -88,7 +98,6 @@ export default class Player extends Node {
 
         c.rotation[1] = ((c.rotation[1] % twopi) + twopi) % twopi;
     }
-    */
 
     keydownHandler(e) {
         this.keys[e.code] = true;
@@ -99,3 +108,11 @@ export default class Player extends Node {
     }
 
 }
+
+Player.defaults = {
+    velocity         : [0, 0, 0],
+    mouseSensitivity : 0.002,
+    maxSpeed         : 3,
+    friction         : 0.2,
+    acceleration     : 20
+};
