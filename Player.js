@@ -82,23 +82,25 @@ export default class Player extends Node {
     mousemoveHandler(e) {
         const dx = e.movementX;
         const dy = e.movementY;
-        const c = this;
+        const p = this
+        const c = this.children[0];
 
         c.rotation[0] -= dy * c.mouseSensitivity;
-        c.rotation[1] -= dx * c.mouseSensitivity;
+        p.rotation[1] -= dx * c.mouseSensitivity;
 
         const pi = Math.PI;
         const twopi = pi * 2;
-        const halfpi = pi / 2;
+        const cLimitUp = pi/5;
+        const cLimitDown = pi/4;
 
-        if (c.rotation[0] > halfpi) {
-            c.rotation[0] = halfpi;
+        if (c.rotation[0] > cLimitUp) {
+            c.rotation[0] = cLimitUp;
         }
-        if (c.rotation[0] < -halfpi) {
-            c.rotation[0] = -halfpi;
+        if (c.rotation[0] < -cLimitDown) {
+            c.rotation[0] = -cLimitDown;
         }
 
-        c.rotation[1] = ((c.rotation[1] % twopi) + twopi) % twopi;
+        p.rotation[1] = ((p.rotation[1] % twopi) + twopi) % twopi;
     }
 
     keydownHandler(e) {
