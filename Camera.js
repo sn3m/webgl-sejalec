@@ -33,7 +33,7 @@ Camera.defaults = {
     aspect           : 1,
     fov              : 1.5,
     near             : 0.01,
-    far              : 500,
+    far              : 100000,
     velocity         : [0, 0, 0],
     mouseSensitivity : 0.002,
     maxSpeed         : 3,
