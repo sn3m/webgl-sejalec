@@ -2,8 +2,8 @@
   "nodes": [
     {
       "type": "player",
-      "mesh": 1,
-      "texture": 1,
+      "mesh": 3,
+      "texture": 0,
       "aabb": {
         "min": [-0.5, -0.5, -0.5],
         "max": [0.5, 0.5, 0.5]
@@ -13,7 +13,8 @@
       "children": [
         {
           "type": "camera",
-          "translation": [0, 0.9, 1.5],
+          "translation": [0, 4, 4],
+          "rotation": [-0.6, 0, 0],
           "aabb": {
             "min": [0, 0, 0],
             "max": [0, 0, 0]
@@ -27,8 +28,8 @@
     },
     {
       "type": "model",
-      "mesh": 2,
-      "texture": 2,
+      "mesh": 3,
+      "texture": 4,
       "aabb": {
         "min": [-1, -1, -1],
         "max": [1, 1, 1]
@@ -78,16 +79,67 @@
       "translation": [3, 0.1, -1],
       "rotation": [0, 1, 0],
       "scale": [1, 0.1, 1]
+    },
+    {
+      "type": "model",
+      "mesh": 2,
+      "texture": 0,
+      "aabb": {
+        "min": [-0.3, -0.1, -0.3],
+        "max": [0.3, 0.1, 0.3]
+      },
+      "translation": [1, 0, 1],
+      "rotation": [0, 1, 0],
+      "scale": [0.3, 0.3, 0.3]
+    },
+    {
+      "type": "model",
+      "mesh": 2,
+      "texture": 2,
+      "aabb": {
+        "min": [-0.3, -0.1, -0.3],
+        "max": [0.3, 0.1, 0.3]
+      },
+      "translation": [4.7, 0.45, 6],
+      "rotation": [90, 1, 0],
+      "scale": [0.3, 0.3, 0.3]
+    },
+    {
+      "type": "model",
+      "mesh": 2,
+      "texture": 1,
+      "aabb": {
+        "min": [-1, -0.1, -1],
+        "max": [1, 0.1, 1]
+      },
+      "translation": [2, 0, 1],
+      "rotation": [0, 1, 0],
+      "scale": [0.3, 0.3, 0.3]
+    },
+    {
+      "type": "model",
+      "mesh": 3,
+      "texture": 0,
+      "aabb": {
+        "min": [-1, -0.1, -1],
+        "max": [1, 0.1, 1]
+      },
+      "translation": [5, 1, 5],
+      "rotation": [0, 1, 0],
+      "scale": [1, 1, 1]
     }
   ],
   "textures": [
     "./assets/images/crate-diffuse.png",
     "./assets/images/grass.png",
+    "./assets/images/roza1_TEXTURA.png",
     "./assets/images/pokrajnabox.png"
   ],
   "meshes": [
     "./assets/models/cube.json",
     "./assets/models/pyramid.json",
+    "./assets/models/roza.json",
+    "./assets/models/sejalec.json"
     "./assets/models/skybox.json"
   ]
 }
