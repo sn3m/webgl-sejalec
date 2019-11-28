@@ -28,6 +28,18 @@
     },
     {
       "type": "model",
+      "mesh": 4,
+      "texture": 3,
+      "aabb": {
+        "min": [-1, -1, -1],
+        "max": [1, 1, 1]
+      },
+      "translation": [0, 0, 0],
+      "scale": [50, 50, 50],
+      "ignoreCollision": true
+    },
+    {
+      "type": "model",
       "mesh": 0,
       "texture": 0,
       "aabb": {
@@ -120,12 +132,14 @@
   "textures": [
     "./assets/images/crate-diffuse.png",
     "./assets/images/grass.png",
-    "./assets/images/roza1_TEXTURA.png"
+    "./assets/images/roza1_TEXTURA.png",
+    "./assets/images/pokrajnabox.png"
   ],
   "meshes": [
     "./assets/models/cube.json",
     "./assets/models/pyramid.json",
     "./assets/models/roza.json",
-    "./assets/models/sejalec.json"
+    "./assets/models/sejalec.json",
+    "./assets/models/skybox.json"
   ]
 }
