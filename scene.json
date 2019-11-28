@@ -74,7 +74,6 @@
   ],
   "meshes": [
     "./assets/models/cube.json",
-    "./assets/models/pyramid.json",
-    "./assets/models/hexagon.json"
+    "./assets/models/pyramid.json"
   ]
 }
