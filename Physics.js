@@ -1,3 +1,6 @@
+import Player from './Player.js';
+import TerrainCell from './TerrainCell.js';
+
 const vec3 = glMatrix.vec3;
 const mat4 = glMatrix.mat4;
 
@@ -8,17 +11,80 @@ export default class Physics {
     }
 
     update(dt) {
+        let pGravity = -1;
+        let player = null;
         this.scene.traverse(node => {
             if (node.velocity) {
                 vec3.scaleAndAdd(node.translation, node.translation, node.velocity, dt);
                 node.updateTransform();
                 this.scene.traverse(other => {
                     if (node !== other && !node.ignoreCollision && !other.ignoreCollision) {
-                        this.resolveCollision(node, other);
+                        if(node instanceof Player && other instanceof TerrainCell) {
+                            if(player===null) {
+                                player = node;
+                            }
+
+                            //calculate if gravity is needed
+                            const res = this.resolveGravity(node, other);
+                            if( pGravity<res ) {
+                                pGravity = res;
+                            }
+
+                        } else {
+                            this.resolveCollision(node, other);
+                        }
                     }
                 });
             }
         });
+        player.translation[1] = player.translation[1] + (pGravity*0.05);
+        player.updateTransform();
+    }
+
+    resolveGravity(a, b) {
+        // Update bounding boxes with global translation.
+        const ta = a.getGlobalTransform();
+        const tb = b.getGlobalTransform();
+
+        const posa = mat4.getTranslation(vec3.create(), ta);
+        const posb = mat4.getTranslation(vec3.create(), tb);
+
+        const mina = vec3.add(vec3.create(), posa, a.aabb.min);
+        const maxa = vec3.add(vec3.create(), posa, a.aabb.max);
+        const minb = vec3.add(vec3.create(), posb, b.aabb.min);
+        const maxb = vec3.add(vec3.create(), posb, b.aabb.max);
+
+        let mins = a.aabb.min.slice();
+        let maxs = a.aabb.max.slice();
+        mins[1] -= 0.5;
+        maxs[1] += 0.5;
+        const minsa = vec3.add(vec3.create(), posa, mins);
+        const maxsa = vec3.add(vec3.create(), posa, maxs);
+
+        // Check if there is collision.
+        const isColliding = this.aabbIntersection({
+            min: mina,
+            max: maxa
+        }, {
+            min: minb,
+            max: maxb
+        });
+
+        const isStandingOn = this.aabbIntersection({
+            min: minsa,
+            max: maxsa
+        }, {
+            min: minb,
+            max: maxb
+        });
+
+        if (!isStandingOn) {
+            return -1;
+        } else if (isColliding) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     intervalIntersection(min1, max1, min2, max2) {
