@@ -64,17 +64,23 @@ export default class Player extends Node {
 
         // 5: put flower in front of player
         if (this.keys['KeyF']) {
+
+            let flowerPick = Math.round(Math.random()) + 2;
+            let randomRotate = (Math.round(Math.random()) % (2 * Math.PI));
+            let rozaX = c.translation[0] - 2 * Math.sin(c.rotation[1]);
+            let rozaY = c.translation[2] - 2 * Math.cos(c.rotation[1]);
+
             scene.addNode(builder.createNode(
                 {
                     "type": "model",
-                    "mesh": 2,
-                    "texture": 2,
+                    "mesh": flowerPick,
+                    "texture": flowerPick,
                     "aabb": {
-                        "min": [-1, -0.1, -1],
-                        "max": [1, 0.1, 1]
+                        "min": [-0.5, -0.1, -0.5],
+                        "max": [0.5, 0.1, 0.5]
                     },
-                    "translation": [c.translation[0], c.translation[1], c.translation[2]],
-                    "rotation": [0, 0, 0],
+                    "translation": [rozaX, 1, rozaY],
+                    "rotation": [0, randomRotate, 0],
                     "scale": [0.3, 0.3, 0.3]
                 }
             ));
