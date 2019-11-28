@@ -83,7 +83,7 @@
   "textures": [
     "./assets/images/crate-diffuse.png",
     "./assets/images/grass.png",
-    "./assets/images/skybox.png"
+    "./assets/images/pokrajnabox.png"
   ],
   "meshes": [
     "./assets/models/cube.json",
