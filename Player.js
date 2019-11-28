@@ -20,8 +20,9 @@ export default class Player extends Node {
         this.keys = {};
     }
 
-    update(dt) {
+    update(dt, scene, builder, renderer) {
         const c = this;
+        const p = this.children[0];
 
         const forward = vec3.set(vec3.create(),
             -Math.sin(c.rotation[1]), 0, -Math.cos(c.rotation[1]));
@@ -59,6 +60,25 @@ export default class Player extends Node {
         const len = vec3.len(c.velocity);
         if (len > c.maxSpeed) {
             vec3.scale(c.velocity, c.velocity, c.maxSpeed / len);
+        }
+
+        // 5: put flower in front of player
+        if (this.keys['KeyF']) {
+            scene.addNode(builder.createNode(
+                {
+                    "type": "model",
+                    "mesh": 2,
+                    "texture": 2,
+                    "aabb": {
+                        "min": [-1, -0.1, -1],
+                        "max": [1, 0.1, 1]
+                    },
+                    "translation": [c.translation[0], c.translation[1], c.translation[2]],
+                    "rotation": [0, 0, 0],
+                    "scale": [0.3, 0.3, 0.3]
+                }
+            ));
+            renderer.prepare(scene);
         }
 
     }

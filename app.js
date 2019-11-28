@@ -25,8 +25,8 @@ class App extends Application {
 
     async load(uri) {
         const scene = await new SceneLoader().loadScene(uri);
-        const builder = new SceneBuilder(scene);
-        this.scene = builder.build();
+        this.builder = new SceneBuilder(scene);
+        this.scene = this.builder.build();
         this.physics = new Physics(this.scene);
 
         // Find first camera.
@@ -66,7 +66,7 @@ class App extends Application {
         this.startTime = this.time;
 
         if (this.player) {
-            this.player.update(dt);
+            this.player.update(dt, this.scene, this.builder, this.renderer);
         }
 
         if (this.physics) {
