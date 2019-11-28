@@ -5,7 +5,6 @@ import Physics from './Physics.js';
 import Camera from './Camera.js';
 import SceneLoader from './SceneLoader.js';
 import SceneBuilder from './SceneBuilder.js';
-import Player from "./Player.js";
 
 class App extends Application {
 
@@ -24,21 +23,19 @@ class App extends Application {
     }
 
     async load(uri) {
-        const scene = await new SceneLoader().loadScene(uri);
+        const scene = await new SceneLoader().loadScene('scene.json');
         const builder = new SceneBuilder(scene);
         this.scene = builder.build();
         this.physics = new Physics(this.scene);
 
         // Find first camera.
         this.camera = null;
-        this.player = null;
         this.scene.traverse(node => {
-            if (node instanceof Player) {
-                this.player = node;
+            if (node instanceof Camera) {
+                this.camera = node;
             }
         });
 
-        this.camera = this.player.children[0];
         this.camera.aspect = this.aspect;
         this.camera.updateProjection();
         this.renderer.prepare(this.scene);
@@ -54,9 +51,9 @@ class App extends Application {
         }
 
         if (document.pointerLockElement === this.canvas) {
-            this.player.enable();
+            this.camera.enable();
         } else {
-            this.player.disable();
+            this.camera.disable();
         }
     }
 
@@ -65,8 +62,8 @@ class App extends Application {
         const dt = (this.time - this.startTime) * 0.001;
         this.startTime = this.time;
 
-        if (this.player) {
-            this.player.update(dt);
+        if (this.camera) {
+            this.camera.update(dt);
         }
 
         if (this.physics) {
