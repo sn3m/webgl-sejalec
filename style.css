@@ -24,7 +24,21 @@ body {
     top: 20px;
 }
 
-.status-bars {
+.endgame_overlay {
+    position: fixed;
+    display: table-cell;
+    height: 100%;
+    text-align: center;
+    width: 100%;
+    vertical-align: middle;
+    horiz-align: center;
+    font-size: 50px;
+    font-weight: bold;
+    color: yellow;
+    padding-top: 100px;
+}
+
+.box {
     background: rgba(0,255,0,0.5);
     padding: 10px;
 }
