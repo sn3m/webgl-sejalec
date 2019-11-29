@@ -17,6 +17,8 @@ class App extends Application {
         this.startTime = this.time;
         this.aspect = 1;
 
+        this.score = 10;
+
         this.pointerlockchangeHandler = this.pointerlockchangeHandler.bind(this);
         document.addEventListener('pointerlockchange', this.pointerlockchangeHandler);
 
@@ -24,8 +26,10 @@ class App extends Application {
     }
 
     async load(uri) {
+        const terrain_size = 21;     //should be odd number
+
         const scene = await new SceneLoader().loadScene(uri);
-        this.builder = new SceneBuilder(scene);
+        this.builder = new SceneBuilder(scene, terrain_size);
         this.scene = this.builder.build();
         this.physics = new Physics(this.scene);
 
@@ -89,7 +93,6 @@ class App extends Application {
             this.camera.updateProjection();
         }
     }
-
 }
 
 document.addEventListener('DOMContentLoaded', () => {

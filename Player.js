@@ -5,13 +5,14 @@ import WaterWell from "./WaterWell.js";
 import TerrainCell from "./TerrainCell.js";
 import Skybox from "./Skybox.js";
 import TreeOfLife from "./TreeOfLife.js";
+import Score from "./Score.js";
 
 const mat4 = glMatrix.mat4;
 const vec3 = glMatrix.vec3;
 
 export default class Player extends Node {
 
-    constructor(mesh, image, options) {
+    constructor(mesh, image, options, size) {
         super(options);
         Utils.init(this, this.constructor.defaults, options);
 
@@ -23,6 +24,10 @@ export default class Player extends Node {
         this.enableKeyK = true;
         this.enableKeyL = true;
         this.konec = false;
+
+        this.score = new Score(size, size);
+        this.score.display();
+
 
         this.mousemoveHandler = this.mousemoveHandler.bind(this);
         this.keydownHandler = this.keydownHandler.bind(this);
@@ -305,6 +310,5 @@ Player.defaults = {
     friction         : 0.2,
     acceleration     : 20,
     waterInLiters    : 3,
-    numFlowers       : 0,
-    numLostFlowers   : 0
+    score            : null
 };

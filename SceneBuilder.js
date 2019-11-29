@@ -15,8 +15,9 @@ import Skybox from "./Skybox.js";
 
 export default class SceneBuilder {
 
-    constructor(spec) {
+    constructor(spec, terrain_size) {
         this.spec = spec;
+        this.terrain_size = terrain_size;
     }
 
     createNode(spec) {
@@ -60,8 +61,8 @@ export default class SceneBuilder {
             case 'player' : {
                 const mesh = new Mesh(this.spec.meshes[spec.mesh]);
                 const texture = this.spec.textures[spec.texture];
-                let player = new Player(mesh, texture, spec);
-                player.addChild(new Camera(spec.children[0]))
+                let player = new Player(mesh, texture, spec, this.terrain_size);
+                player.addChild(new Camera(spec.children[0]));
                 return player;
             }
             default: return new Node(spec);
@@ -71,7 +72,7 @@ export default class SceneBuilder {
     build() {
         let scene = new Scene();
 
-        this.addTerrainNodes(25); //should be odd number
+        this.addTerrainNodes(this.terrain_size); //should be odd number
 
         this.spec.nodes.forEach(spec => scene.addNode(this.createNode(spec)));
 
