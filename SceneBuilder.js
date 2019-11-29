@@ -7,6 +7,11 @@ import Player from './Player.js';
 import TerrainCell from './TerrainCell.js';
 
 import Scene from './Scene.js';
+import Flower from "./Flower.js";
+import Seed from "./Seed.js";
+import WaterWell from "./WaterWell.js";
+import TreeOfLife from "./TreeOfLife.js";
+import Skybox from "./Skybox.js";
 
 export default class SceneBuilder {
 
@@ -23,11 +28,36 @@ export default class SceneBuilder {
                 const texture = this.spec.textures[spec.texture];
                 return new Model(mesh, texture, spec);
             }
+            case 'skybox': {
+                const mesh = new Mesh(this.spec.meshes[spec.mesh]);
+                const texture = this.spec.textures[spec.texture];
+                return new Skybox(mesh, texture, spec);
+            }
             case 'terrainCell' : {
                 const mesh = new Mesh(this.spec.meshes[spec.mesh]);
                 const texture = this.spec.textures[spec.texture];
                 return new TerrainCell(mesh, texture, spec);
-            } 
+            }
+            case 'seed': {
+                const mesh = new Mesh(this.spec.meshes[spec.mesh]);
+                const texture = this.spec.textures[spec.texture];
+                return new Seed(mesh, texture, spec);
+            }
+            case 'flower': {
+                const mesh = new Mesh(this.spec.meshes[spec.mesh]);
+                const texture = this.spec.textures[spec.texture];
+                return new Flower(mesh, texture, spec);
+            }
+            case 'waterwell': {
+                const mesh = new Mesh(this.spec.meshes[spec.mesh]);
+                const texture = this.spec.textures[spec.texture];
+                return new WaterWell(mesh, texture, spec);
+            }
+            case 'treeoflife': {
+                const mesh = new Mesh(this.spec.meshes[spec.mesh]);
+                const texture = this.spec.textures[spec.texture];
+                return new TreeOfLife(mesh, texture, spec);
+            }
             case 'player' : {
                 const mesh = new Mesh(this.spec.meshes[spec.mesh]);
                 const texture = this.spec.textures[spec.texture];

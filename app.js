@@ -29,8 +29,8 @@ class App extends Application {
         const terrain_size = 21;     //should be odd number
 
         const scene = await new SceneLoader().loadScene(uri);
-        const builder = new SceneBuilder(scene, terrain_size);
-        this.scene = builder.build();
+        this.builder = new SceneBuilder(scene, terrain_size);
+        this.scene = this.builder.build();
         this.physics = new Physics(this.scene);
 
         // Find first camera.
@@ -70,7 +70,7 @@ class App extends Application {
         this.startTime = this.time;
 
         if (this.player) {
-            this.player.update(dt);
+            this.player.update(dt, this.scene, this.builder, this.renderer);
         }
 
         if (this.physics) {
