@@ -24,6 +24,15 @@ body {
     top: 20px;
 }
 
+.status-bars {
+    background: rgba(0,255,0,0.5);
+    padding: 10px;
+}
+
+p {
+    margin: 4px;
+}
+
 /* IE10 */
 #water {color: blue;}
 #flowers {color: green;}
