@@ -6,6 +6,9 @@ import Camera from './Camera.js';
 import Player from './Player.js';
 
 import Scene from './Scene.js';
+import Flower from "./Flower.js";
+import Seed from "./Seed.js";
+import WaterWell from "./WaterWell.js";
 
 export default class SceneBuilder {
 
@@ -20,6 +23,21 @@ export default class SceneBuilder {
                 const mesh = new Mesh(this.spec.meshes[spec.mesh]);
                 const texture = this.spec.textures[spec.texture];
                 return new Model(mesh, texture, spec);
+            }
+            case 'seed': {
+                const mesh = new Mesh(this.spec.meshes[spec.mesh]);
+                const texture = this.spec.textures[spec.texture];
+                return new Seed(mesh, texture, spec);
+            }
+            case 'flower': {
+                const mesh = new Mesh(this.spec.meshes[spec.mesh]);
+                const texture = this.spec.textures[spec.texture];
+                return new Flower(mesh, texture, spec);
+            }
+            case 'waterwell': {
+                const mesh = new Mesh(this.spec.meshes[spec.mesh]);
+                const texture = this.spec.textures[spec.texture];
+                return new WaterWell(mesh, texture, spec);
             }
             case 'player' : {
                 const mesh = new Mesh(this.spec.meshes[spec.mesh]);

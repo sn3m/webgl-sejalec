@@ -1,6 +1,7 @@
 import Utils from './Utils.js';
 import Node from './Node.js';
-import Model from "./Model.js";
+import Seed from "./Seed.js";
+import WaterWell from "./WaterWell.js";
 
 const mat4 = glMatrix.mat4;
 const vec3 = glMatrix.vec3;
@@ -52,8 +53,7 @@ export default class Player extends Node {
         if (!this.keys['KeyW'] &&
             !this.keys['KeyS'] &&
             !this.keys['KeyD'] &&
-            !this.keys['KeyA'])
-        {
+            !this.keys['KeyA']) {
             vec3.scale(c.velocity, c.velocity, 1 - c.friction);
         }
 
@@ -65,62 +65,8 @@ export default class Player extends Node {
 
         // 5: put flower in front of player
         if (this.keys['KeyF']) {
-
-            let rozaX = c.translation[0] - 2 * Math.sin(c.rotation[1]);
-            let rozaY = c.translation[2] - 2 * Math.cos(c.rotation[1]);
-
-            let found = null;
-            scene.nodes.forEach(node => {
-                if (node instanceof Model){
-                    let checkX = node.translation[0];
-                    let checkY = node.translation[2];
-                    if (rozaX <= checkX + 1 &&
-                        rozaX >= checkX - 1 &&
-                        rozaY <= checkY + 1 &&
-                        rozaY >= checkY - 1){
-                        found = node;
-                    }
-                }
-            });
-            let randomRotate = (Math.round(Math.random()) % (2 * Math.PI));
-
-            if (found == null){
-                let flowerPick = Math.round(Math.random()) + 2;
-                scene.addNode(builder.createNode(
-                    {
-                        "type": "model",
-                        "mesh": 2,
-                        "texture": 2,
-                        "aabb": {
-                            "min": [-0.5, -0.1, -0.5],
-                            "max": [0.5, 0.1, 0.5]
-                        },
-                        "translation": [rozaX, 1, rozaY],
-                        "rotation": [0, randomRotate, 0],
-                        "scale": [0.3, 0.3, 0.3]
-                    }
-                ));
-            }
-            else {
-                scene.replaceNode(found, builder.createNode(
-                    {
-                        "type": "model",
-                        "mesh": 3,
-                        "texture": 3,
-                        "aabb": {
-                            "min": [-0.5, -0.1, -0.5],
-                            "max": [0.5, 0.1, 0.5]
-                        },
-                        "translation": [found.translation[0], 1, found.translation[2]],
-                        "rotation": [0, randomRotate, 0],
-                        "scale": [0.3, 0.3, 0.3]
-                    }
-                ));
-            }
-            renderer.prepare(scene);
-
+            this.actionKeyFunctions(scene, builder, renderer);
         }
-
     }
 
     enable() {
@@ -142,7 +88,7 @@ export default class Player extends Node {
     mousemoveHandler(e) {
         const dx = e.movementX;
         const dy = e.movementY;
-        const p = this
+        const p = this;
         const c = this.children[0];
 
         c.rotation[0] -= dy * c.mouseSensitivity;
@@ -171,6 +117,63 @@ export default class Player extends Node {
         this.keys[e.code] = false;
     }
 
+    actionKeyFunctions(scene, builder, renderer) {
+
+        let pointerX = this.translation[0] - 2 * Math.sin(this.rotation[1]);
+        let pointerY = this.translation[2] - 2 * Math.cos(this.rotation[1]);
+
+        let found = null;
+        scene.nodes.forEach(node => {
+            if (pointerX <= node.translation[0] + node.scale[0] &&
+                pointerX >= node.translation[0] - node.scale[0] &&
+                pointerY <= node.translation[2] + node.scale[2] &&
+                pointerY >= node.translation[2] - node.scale[2]) {
+                found = node;
+            }
+        });
+
+        let randomRotate = (Math.round(Math.random()) % (2 * Math.PI));
+
+        if (found == null){
+            scene.addNode(builder.createNode(
+                {
+                    "type": "seed",
+                    "mesh": 1,
+                    "texture": 1,
+                    "aabb": {
+                        "min": [-0.3, -0.1, -0.3],
+                        "max": [0.3, 0.1, 0.3]
+                    },
+                    "translation": [pointerX, 1, pointerY],
+                    "rotation": [0, randomRotate, 0],
+                    "scale": [1, 1, 1]
+                }
+            ));
+            renderer.prepare(scene);
+        }
+        else if (found instanceof Seed && this.hasWater) {
+            let flowerPick = Math.round(Math.random()) + 2;
+            scene.replaceNode(found, builder.createNode(
+                {
+                    "type": "flower",
+                    "mesh": flowerPick,
+                    "texture": flowerPick,
+                    "aabb": {
+                        "min": [-0.5, -0.1, -0.5],
+                        "max": [0.5, 0.1, 0.5]
+                    },
+                    "translation": [found.translation[0], 1, found.translation[2]],
+                    "rotation": [0, randomRotate, 0],
+                    "scale": [0.3, 0.3, 0.3]
+                }
+            ));
+            this.hasWater = false;
+            renderer.prepare(scene);
+        }
+        else if (found instanceof WaterWell && !this.hasWater){
+            this.hasWater = true;
+        }
+    }
 }
 
 Player.defaults = {
@@ -178,5 +181,6 @@ Player.defaults = {
     mouseSensitivity : 0.002,
     maxSpeed         : 3,
     friction         : 0.2,
-    acceleration     : 20
+    acceleration     : 20,
+    hasWater         : false
 };

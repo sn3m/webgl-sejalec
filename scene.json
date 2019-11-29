@@ -27,101 +27,23 @@
       ]
     },
     {
-      "type": "model",
+      "type": "waterwell",
       "mesh": 0,
-      "texture": 0,
+      "texture": 4,
       "aabb": {
-        "min": [-1, -1, -1],
-        "max": [1, 1, 1]
+        "min": [-1.5, -1.5, -1.5],
+        "max": [1.5, 1.5, 1.5]
       },
-      "translation": [3, 1, -5]
-    },
-    {
-      "type": "model",
-      "mesh": 0,
-      "texture": 1,
-      "aabb": {
-        "min": [-1, -1, -1],
-        "max": [1, 1, 1]
-      },
-      "translation": [0, 1, 5]
-    },
-    {
-      "type": "model",
-      "mesh": 1,
-      "texture": 1,
-      "aabb": {
-        "min": [-0.5, -0.5, -0.5],
-        "max": [0.5, 0.5, 0.5]
-      },
-      "translation": [0, 1, -5]
-    },
-    {
-      "type": "model",
-      "mesh": 0,
-      "texture": 0,
-      "aabb": {
-        "min": [-1, -0.1, -1],
-        "max": [1, 0.1, 1]
-      },
-      "translation": [3, 0.1, -1],
-      "rotation": [0, 1, 0],
-      "scale": [1, 0.1, 1]
-    },
-    {
-      "type": "model",
-      "mesh": 2,
-      "texture": 2,
-      "aabb": {
-        "min": [-0.3, -0.1, -0.3],
-        "max": [0.3, 0.1, 0.3]
-      },
-      "translation": [1, 0, 1],
-      "rotation": [0, 1, 0],
-      "scale": [0.3, 0.3, 0.3]
-    },
-    {
-      "type": "model",
-      "mesh": 3,
-      "texture": 3,
-      "aabb": {
-        "min": [-0.3, -0.1, -0.3],
-        "max": [0.3, 0.1, 0.3]
-      },
-      "translation": [4.7, 0.45, 6],
-      "rotation": [90, 1, 0],
-      "scale": [0.3, 0.3, 0.3]
-    },
-    {
-      "type": "model",
-      "mesh": 2,
-      "texture": 2,
-      "aabb": {
-        "min": [-1, -0.1, -1],
-        "max": [1, 0.1, 1]
-      },
-      "translation": [2, 0, 1],
-      "rotation": [0, 1, 0],
-      "scale": [0.3, 0.3, 0.3]
-    },
-    {
-      "type": "model",
-      "mesh": 4,
-      "texture": 0,
-      "aabb": {
-        "min": [-1, -0.1, -1],
-        "max": [1, 0.1, 1]
-      },
-      "translation": [5, 1, 5],
-      "rotation": [0, 1, 0],
-      "scale": [1, 1, 1]
+      "translation": [-10, 1.5, -10],
+      "scale": [1.5, 1.5, 1.5]
     }
   ],
   "textures": [
     "./assets/images/crate-diffuse.png",
     "./assets/images/grass.png",
     "./assets/images/roza_1.png",
-    "./assets/images/roza_2.png"
+    "./assets/images/roza_2.png",
+    "./assets/images/waterwell.png"
   ],
   "meshes": [
     "./assets/models/cube.json",
