@@ -25,31 +25,13 @@ body {
 }
 
 /* IE10 */
-.water {
-    color: blue;
-}
+.water {color: blue;}
+.flowers {color: green;}
 
 /* Firefox */
-.water::-moz-progress-bar {
-    background: blue;
-}
+.water::-moz-progress-bar {background: blue;}
+.flowers::-moz-progress-bar {background: green;}
 
 /* Chrome */
-.water::-webkit-progress-value {
-    background: blue;
-}
-
-/* IE10 */
-.flowers {
-    color: green;
-}
-
-/* Firefox */
-.flowers::-moz-progress-bar {
-    background: green;
-}
-
-/* Chrome */
-.flowers::-webkit-progress-value {
-    background: green;
-}
+.water::-webkit-progress-value {background: blue;}
+.flowers::-webkit-progress-value {background: green;}
