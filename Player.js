@@ -5,6 +5,7 @@ import WaterWell from "./WaterWell.js";
 import TerrainCell from "./TerrainCell.js";
 import Skybox from "./Skybox.js";
 import Score from "./Score.js";
+import TreeOfLife from "./TreeOfLife.js";
 
 const mat4 = glMatrix.mat4;
 const vec3 = glMatrix.vec3;
@@ -100,13 +101,37 @@ export default class Player extends Node {
             }, 1000);
         }
 
-        // 8: jump hopefully
-        if (this.keys['Space'] && this.enableKeySpace){
-            c.enableKeySpace = false;
-            c.actionKeySpace();
-            setTimeout(function(){
-                c.enableKeySpace = true;
-            }, 1000);
+        // // jumping for testing
+        // if (this.keys['Space'] && this.enableKeySpace){
+        //     c.enableKeySpace = false;
+        //     c.actionKeySpace();
+        //     setTimeout(function(){
+        //         c.enableKeySpace = true;
+        //     }, 1000);
+        // }
+
+        // game over :)
+        if (!this.score.allow_updates){
+            let found = null;
+            scene.traverse(node => {
+                if (node instanceof TreeOfLife) {
+                    found = node;
+                }
+            });
+            let addedNode = scene.replaceNode(found, builder.createNode(
+                {
+                    "type": "treeoflife",
+                    "mesh": 3,
+                    "texture": 3,
+                    "aabb": {
+                        "min": [-2.5, -2.5, -2.5],
+                        "max": [2.5, 100, 2.5]
+                    },
+                    "translation": [0, -5, 0],
+                    "scale": [5, 5, 5]
+                }
+            ));
+            renderer.renderSingleNode(addedNode);
         }
     }
 
@@ -235,10 +260,10 @@ export default class Player extends Node {
         }
     }
 
-    actionKeySpace() {
-        // jump, very simple but not looking smooth at all :)
-        this.translation[1] += 3;
-    }
+    // actionKeySpace() {
+    //     // jump, very simple but not looking smooth at all :)
+    //     this.translation[1] += 3;
+    // }
 
     getNodeInFront(scene) {
         const pointerX = this.translation[0] - 2 * Math.sin(this.rotation[1]);
