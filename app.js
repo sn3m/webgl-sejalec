@@ -71,6 +71,7 @@ class App extends Application {
 
         if (this.player) {
             this.player.update(dt);
+            this.displayScore(this.player.score.value);
         }
 
         if (this.physics) {
@@ -92,6 +93,10 @@ class App extends Application {
             this.camera.aspect = this.aspect;
             this.camera.updateProjection();
         }
+    }
+
+    displayScore(score) {
+        // TODO
     }
 
 }
