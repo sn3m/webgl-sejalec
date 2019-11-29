@@ -61,6 +61,7 @@ export default class Score {
             // the game has been won
             var tmp = document.getElementById("game_won_text");
             tmp.innerHTML = '<div class="endgame_overlay"><div class="box"><p>YOU WIN!!!</p><p>Your score: ' + this.value + '</p></div></div>';
+            this.allow_updates = false;
         }
     }
 }
