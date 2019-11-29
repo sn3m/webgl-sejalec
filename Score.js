@@ -23,16 +23,6 @@ export default class Score {
         this.value = 0;
     }
 
-    evaluate() {
-        if(this.num_tiles === 0) {
-            this.percentage = 0;
-            this.value = 0;
-        } else {
-            this.percentage = Math.min(Math.floor(this.num_flowers*100/(this.num_tiles*0.80)), 100);
-            this.value = Math.max(0, this.num_flowers*this.points - this.lost_flowers*this.penalty);
-        }
-    }
-
     increase() {
         this.num_flowers++;
         this.evaluate();
@@ -42,5 +32,26 @@ export default class Score {
         this.num_flowers--;
         this.lost_flowers++;
         this.evaluate();
+    }
+
+    evaluate() {
+        if(this.num_tiles === 0) {
+            this.percentage = 0;
+            this.value = 0;
+        } else {
+            this.percentage = Math.min(Math.floor(this.num_flowers*100/(this.num_tiles*0.80)), 100);
+            this.value = Math.max(0, this.num_flowers*this.points - this.lost_flowers*this.penalty);
+        }
+        this.display();
+    }
+
+    display() {
+        var bar = document.getElementById("flowers");
+        bar.setAttribute("value", this.percentage);
+
+        if(this.percentage >= 100) {
+            // the game has been won
+            // TODO
+        }
     }
 }

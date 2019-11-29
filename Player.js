@@ -15,6 +15,7 @@ export default class Player extends Node {
         this.image = image;
 
         this.score = new Score(size, size);
+        this.score.display();
 
         this.mousemoveHandler = this.mousemoveHandler.bind(this);
         this.keydownHandler = this.keydownHandler.bind(this);
