@@ -1,66 +1,82 @@
 {
-  "nodes": [
-    {
-      "type": "camera",
-      "translation": [0, 1, 0],
-      "aabb": {
-        "min": [-0.2, -0.2, -0.2],
-        "max": [0.2, 0.2, 0.2]
-      },
-      "aspect": 1,
-      "fov": 1.5,
-      "near": 0.01,
-      "far": 100
-    },
-    {
-      "type": "model",
-      "mesh": 0,
-      "texture": 0,
-      "aabb": {
-        "min": [-1, -1, -1],
-        "max": [1, 1, 1]
-      },
-      "translation": [3, 1, -5]
-    },
-    {
-      "type": "model",
-      "mesh": 0,
-      "texture": 1,
-      "aabb": {
-        "min": [-1, -1, -1],
-        "max": [1, 1, 1]
-      },
-      "translation": [0, 1, 5]
-    },
-    {
-      "type": "model",
-      "mesh": 1,
-      "texture": 1,
-      "aabb": {
-        "min": [-0.5, -0.5, -0.5],
-        "max": [0.5, 0.5, 0.5]
-      },
-      "translation": [0, 1, -5]
-    },
-    {
-      "type": "model",
-      "mesh": 0,
-      "texture": 0,
-      "aabb": {
-        "min": [-1, -0.1, -1],
-        "max": [1, 0.1, 1]
-      },
-      "translation": [3, 0.1, -1],
-      "rotation": [0, 1, 0],
-      "scale": [1, 0.1, 1]
-    }
-  ],
-  "textures": [
-    "./assets/images/crate-diffuse.png",
-    "./assets/images/grass.png"
-  ],
-  "meshes": [
-    "./assets/models/cube.json",
-    "./assets/models/pyramid.json"
-  ]
+    "nodes": [
+        {
+            "type": "player",
+            "mesh": 4,
+            "texture": 6,
+            "aabb": {
+                "min": [-0.5, 0, -0.5],
+                "max": [0.5, 1, 0.5]
+            },
+            "translation": [8, 5, -17],
+            "scale": [1, 1, 1],
+            "rotation": [0, 2.2, 0],
+            "children": [
+                {
+                    "type": "camera",
+                    "translation": [0, 6, 4],
+                    "rotation": [-0.6, 0, 0],
+                    "aabb": {
+                        "min": [0, 0, 0],
+                        "max": [0, 0, 0]
+                    },
+                    "aspect": 1,
+                    "fov": 1.5,
+                    "near": 0.01,
+                    "far": 1000
+                }
+            ]
+        },
+        {
+            "type": "skybox",
+            "mesh": 5,
+            "texture": 5,
+            "aabb": {
+                "min": [-1, -1, -1],
+                "max": [1, 1, 1]
+            },
+            "translation": [0, 0, 0],
+            "scale": [250, 250, 250],
+            "ignoreCollision": true
+        },
+        {
+            "type": "waterwell",
+            "mesh": 0,
+            "texture": 4,
+            "aabb": {
+                "min": [-1.5, -1.5, -1.5],
+                "max": [1.5, 1.5, 1.5]
+            },
+            "translation": [-6, -2, -16.2],
+            "scale": [1.5, 1.5, 1.5]
+        },
+        {
+            "type": "treeoflife",
+            "mesh": 3,
+            "texture": 0,
+            "aabb": {
+                "min": [-2.5, -2.5, -2.5],
+                "max": [2.5, 100, 2.5]
+            },
+            "translation": [0, -5, 0],
+            "scale": [5, 5, 5]
+        }
+    ],
+    "textures": [
+        "./assets/images/crate-diffuse.png",
+        "./assets/images/grass.png",
+        "./assets/images/roza_1.png",
+        "./assets/images/roza_2.png",
+        "./assets/images/waterwell.png",
+        "./assets/images/pokrajnabox.png",
+        "./assets/images/sejalec.png"
+    ],
+    "meshes": [
+        "./assets/models/cube.json",
+        "./assets/models/pyramid.json",
+        "./assets/models/roza_1.json",
+        "./assets/models/roza_2.json",
+        "./assets/models/sejalec.json",
+        "./assets/models/skybox.json"
+    ]
 }
