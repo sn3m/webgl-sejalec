@@ -71,7 +71,7 @@ export default class SceneBuilder {
     build() {
         let scene = new Scene();
 
-        this.addTerrainNodes(21); //should be odd number
+        this.addTerrainNodes(25); //should be odd number
 
         this.spec.nodes.forEach(spec => scene.addNode(this.createNode(spec)));
 

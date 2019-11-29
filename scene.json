@@ -3,17 +3,18 @@
     {
       "type": "player",
       "mesh": 4,
-      "texture": 0,
+      "texture": 6,
       "aabb": {
-        "min": [-0.5, -1.7, -0.5],
+        "min": [-0.5, 0, -0.5],
         "max": [0.5, 1, 0.5]
       },
-      "translation": [0, 5, 0],
+      "translation": [8, 5, -17],
       "scale": [1, 1, 1],
+      "rotation": [0, 2.2, 0],
       "children": [
         {
           "type": "camera",
-          "translation": [0, 4, 4],
+          "translation": [0, 6, 4],
           "rotation": [-0.6, 0, 0],
           "aabb": {
             "min": [0, 0, 0],
@@ -46,7 +47,7 @@
         "min": [-1.5, -1.5, -1.5],
         "max": [1.5, 1.5, 1.5]
       },
-      "translation": [-10, -2, -10],
+      "translation": [-6, -2, -16.2],
       "scale": [1.5, 1.5, 1.5]
     },
     {
@@ -54,10 +55,10 @@
       "mesh": 3,
       "texture": 0,
       "aabb": {
-        "min": [-5, -5, -5],
-        "max": [5, 5, 5]
+        "min": [-2.5, -2.5, -2.5],
+        "max": [2.5, 100, 2.5]
       },
-      "translation": [10, -10, -10],
+      "translation": [0, -5, 0],
       "scale": [5, 5, 5]
     }
   ],
@@ -67,7 +68,8 @@
     "./assets/images/roza_1.png",
     "./assets/images/roza_2.png",
     "./assets/images/waterwell.png",
-    "./assets/images/pokrajnabox.png"
+    "./assets/images/pokrajnabox.png",
+    "./assets/images/sejalec.png"
   ],
   "meshes": [
     "./assets/models/cube.json",

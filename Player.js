@@ -4,6 +4,7 @@ import Seed from "./Seed.js";
 import WaterWell from "./WaterWell.js";
 import TerrainCell from "./TerrainCell.js";
 import Skybox from "./Skybox.js";
+import TreeOfLife from "./TreeOfLife.js";
 
 const mat4 = glMatrix.mat4;
 const vec3 = glMatrix.vec3;
@@ -21,6 +22,7 @@ export default class Player extends Node {
         this.enableKeyJ = true;
         this.enableKeyK = true;
         this.enableKeyL = true;
+        this.konec = false;
 
         this.mousemoveHandler = this.mousemoveHandler.bind(this);
         this.keydownHandler = this.keydownHandler.bind(this);
@@ -104,6 +106,30 @@ export default class Player extends Node {
                 c.enableKeySpace = true;
             }, 1000);
         }
+
+        if (this.numFlowers > 10 && !this.konec){
+            this.konec = true;
+            alert("ZMAGA!");
+            scene.nodes.forEach(node => {
+                if(node instanceof TreeOfLife){
+                    let addedNode = scene.replaceNode(node, builder.createNode(
+                        {
+                            "type": "treeoflife",
+                            "mesh": 3,
+                            "texture": 3,
+                            "aabb": {
+                                "min": [-2.5, -2.5, -2.5],
+                                "max": [2.5, 100, 2.5]
+                            },
+                            "translation": [node.translation[0], node.translation[1], node.translation[2]],
+                            "rotation": [0, node.rotation[1], 0],
+                            "scale": [node.scale[0], node.scale[1], node.scale[2]]
+                        }
+                    ));
+                    renderer.renderSingleNode(addedNode);
+                }
+            })
+        }
     }
 
     enable() {
@@ -157,14 +183,14 @@ export default class Player extends Node {
     actionKeyJ(scene, builder, renderer) {
         // is something in front of player
         // if not add Seed node in front
-        const found = this.isNodeInFront(scene);
-        const terrainCell = this.getTerrainCell(scene);
+        const found = this.getNodeInFront(scene);
+        const terrainCell = this.getTerrainCellInFront(scene);
 
         if (found == null && terrainCell != null){
             const randomRotate = (Math.round(Math.random()) % (2 * Math.PI));
             const pointerX = this.translation[0] - 2 * Math.sin(this.rotation[1]);
             const pointerY = this.translation[2] - 2 * Math.cos(this.rotation[1]);
-            scene.addNode(builder.createNode(
+            let addedNode = scene.addNode(builder.createNode(
                 {
                     "type": "seed",
                     "mesh": 1,
@@ -178,14 +204,14 @@ export default class Player extends Node {
                     "scale": [1, 1, 1]
                 }
             ));
-            renderer.prepare(scene);
+            renderer.renderSingleNode(addedNode);
         }
     }
 
     actionKeyK(scene){
         // is something in front of player
         // if WaterWell get water
-        const found = this.isNodeInFront(scene);
+        const found = this.getNodeInFront(scene);
 
         if (found instanceof WaterWell){
             if (this.waterInLiters + 3 > 10) this.waterInLiters = 10;
@@ -204,13 +230,13 @@ export default class Player extends Node {
             return;
         }
 
-        const found = this.isNodeInFront(scene);
-        const terrainCell = this.getTerrainCell(scene);
+        const found = this.getNodeInFront(scene);
+        const terrainCell = this.getTerrainCellInFront(scene);
 
         if (found instanceof Seed && terrainCell != null && this.waterInLiters > 0) {
             const randomRotate = (Math.round(Math.random()) % (2 * Math.PI));
             const flowerPick = Math.round(Math.random()) + 2;
-            scene.replaceNode(found, builder.createNode(
+            let addedNode = scene.replaceNode(found, builder.createNode(
                 {
                     "type": "flower",
                     "mesh": flowerPick,
@@ -225,8 +251,10 @@ export default class Player extends Node {
                 }
             ));
             this.waterInLiters--;
+            this.numFlowers++;
             document.getElementById("water").setAttribute("value", this.waterInLiters);
-            renderer.prepare(scene);
+            document.getElementById("flowers").setAttribute("value", this.numFlowers);
+            renderer.renderSingleNode(addedNode);
         }
     }
 
@@ -235,7 +263,7 @@ export default class Player extends Node {
         this.translation[1] += 3;
     }
 
-    isNodeInFront(scene) {
+    getNodeInFront(scene) {
         const pointerX = this.translation[0] - 2 * Math.sin(this.rotation[1]);
         const pointerY = this.translation[2] - 2 * Math.cos(this.rotation[1]);
         let found = null;
@@ -252,7 +280,7 @@ export default class Player extends Node {
         return found;
     }
 
-    getTerrainCell(scene) {
+    getTerrainCellInFront(scene) {
         const pointerX = this.translation[0] - 2 * Math.sin(this.rotation[1]);
         const pointerY = this.translation[2] - 2 * Math.cos(this.rotation[1]);
         let found = null;
@@ -273,8 +301,10 @@ export default class Player extends Node {
 Player.defaults = {
     velocity         : [0, 0, 0],
     mouseSensitivity : 0.002,
-    maxSpeed         : 3,
+    maxSpeed         : 7,
     friction         : 0.2,
     acceleration     : 20,
-    waterInLiters    : 3
+    waterInLiters    : 3,
+    numFlowers       : 0,
+    numLostFlowers   : 0
 };
