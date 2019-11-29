@@ -71,7 +71,6 @@ class App extends Application {
 
         if (this.player) {
             this.player.update(dt);
-            this.displayScore(this.player.score.value);
         }
 
         if (this.physics) {
@@ -94,11 +93,6 @@ class App extends Application {
             this.camera.updateProjection();
         }
     }
-
-    displayScore(score) {
-        // TODO
-    }
-
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -106,6 +100,4 @@ document.addEventListener('DOMContentLoaded', () => {
     const app = new App(canvas);
     const gui = new dat.GUI();
     gui.add(app, 'enableCamera');
-    gui.add(app, 'score', 0, 100);
-
 });
