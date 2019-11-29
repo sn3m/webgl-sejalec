@@ -11,6 +11,7 @@ import Flower from "./Flower.js";
 import Seed from "./Seed.js";
 import WaterWell from "./WaterWell.js";
 import TreeOfLife from "./TreeOfLife.js";
+import Skybox from "./Skybox.js";
 
 export default class SceneBuilder {
 
@@ -25,6 +26,11 @@ export default class SceneBuilder {
                 const mesh = new Mesh(this.spec.meshes[spec.mesh]);
                 const texture = this.spec.textures[spec.texture];
                 return new Model(mesh, texture, spec);
+            }
+            case 'skybox': {
+                const mesh = new Mesh(this.spec.meshes[spec.mesh]);
+                const texture = this.spec.textures[spec.texture];
+                return new Skybox(mesh, texture, spec);
             }
             case 'terrainCell' : {
                 const mesh = new Mesh(this.spec.meshes[spec.mesh]);

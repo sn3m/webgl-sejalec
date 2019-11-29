@@ -2,6 +2,8 @@ import Utils from './Utils.js';
 import Node from './Node.js';
 import Seed from "./Seed.js";
 import WaterWell from "./WaterWell.js";
+import TerrainCell from "./TerrainCell.js";
+import Skybox from "./Skybox.js";
 
 const mat4 = glMatrix.mat4;
 const vec3 = glMatrix.vec3;
@@ -15,6 +17,10 @@ export default class Player extends Node {
         this.mesh = mesh;
         this.image = image;
 
+        this.enableKeySpace = true;
+        this.enableKeyJ = true;
+        this.enableKeyK = true;
+        this.enableKeyL = true;
 
         this.mousemoveHandler = this.mousemoveHandler.bind(this);
         this.keydownHandler = this.keydownHandler.bind(this);
@@ -64,18 +70,39 @@ export default class Player extends Node {
         }
 
         // 5: put seed in front of player
-        if (this.keys['KeyF']) {
-            this.actionKeyF(scene, builder, renderer);
+        if (this.keys['KeyJ'] && this.enableKeyJ) {
+            c.enableKeyJ = false;
+            c.actionKeyJ(scene, builder, renderer);
+            setTimeout(function(){
+                c.enableKeyJ = true;
+            }, 1000);
         }
 
         // 6: pick up water
-        if (this.keys['KeyG']){
-            this.actionKeyG(scene, builder, renderer);
+        if (this.keys['KeyK'] && this.enableKeyK){
+            c.enableKeyK = false;
+            c.actionKeyK(scene);
+            setTimeout(function(){
+                c.enableKeyK = true;
+            }, 1000);
         }
 
         // 7: water the seed
-        if (this.keys['KeyH']){
-            this.actionKeyH(scene, builder, renderer);
+        if (this.keys['KeyL'] && this.enableKeyL){
+            c.enableKeyL = false;
+            c.actionKeyL(scene, builder, renderer);
+            setTimeout(function(){
+                c.enableKeyL = true;
+            }, 1000);
+        }
+
+        // 8: jump hopefully
+        if (this.keys['Space'] && this.enableKeySpace){
+            c.enableKeySpace = false;
+            c.actionKeySpace();
+            setTimeout(function(){
+                c.enableKeySpace = true;
+            }, 1000);
         }
     }
 
@@ -127,25 +154,26 @@ export default class Player extends Node {
         this.keys[e.code] = false;
     }
 
-    actionKeyF(scene, builder, renderer) {
+    actionKeyJ(scene, builder, renderer) {
         // is something in front of player
         // if not add Seed node in front
-        let found = this.isNodeInFront(scene);
+        const found = this.isNodeInFront(scene);
+        const terrainCell = this.getTerrainCell(scene);
 
-        if (found == null){
-            let randomRotate = (Math.round(Math.random()) % (2 * Math.PI));
-            let pointerX = this.translation[0] - 2 * Math.sin(this.rotation[1]);
-            let pointerY = this.translation[2] - 2 * Math.cos(this.rotation[1]);
+        if (found == null && terrainCell != null){
+            const randomRotate = (Math.round(Math.random()) % (2 * Math.PI));
+            const pointerX = this.translation[0] - 2 * Math.sin(this.rotation[1]);
+            const pointerY = this.translation[2] - 2 * Math.cos(this.rotation[1]);
             scene.addNode(builder.createNode(
                 {
                     "type": "seed",
                     "mesh": 1,
-                    "texture": 1,
+                    "texture": 0,
                     "aabb": {
                         "min": [-0.3, -0.1, -0.3],
                         "max": [0.3, 0.1, 0.3]
                     },
-                    "translation": [pointerX, 1, pointerY],
+                    "translation": [pointerX,  terrainCell.translation[1] + terrainCell.scale[1] + 0.5, pointerY],
                     "rotation": [0, randomRotate, 0],
                     "scale": [1, 1, 1]
                 }
@@ -154,25 +182,34 @@ export default class Player extends Node {
         }
     }
 
-    actionKeyG(scene, builder, renderer){
+    actionKeyK(scene){
         // is something in front of player
         // if WaterWell get water
-        let found = this.isNodeInFront(scene);
+        const found = this.isNodeInFront(scene);
 
-        if (found instanceof WaterWell && !this.hasWater){
-            this.hasWater = true;
+        if (found instanceof WaterWell){
+            if (this.waterInLiters + 3 > 10) this.waterInLiters = 10;
+            else this.waterInLiters += 3;
+            document.getElementById("water").setAttribute("value", this.waterInLiters);
         }
     }
 
-    actionKeyH(scene, builder, renderer) {
+    actionKeyL(scene, builder, renderer) {
         // is something in front of player
         // if Seed and player has water
         // water the seed
-        let found = this.isNodeInFront(scene);
 
-        if (found instanceof Seed && this.hasWater) {
-            let randomRotate = (Math.round(Math.random()) % (2 * Math.PI));
-            let flowerPick = Math.round(Math.random()) + 2;
+        if (this.waterInLiters === 0) {
+            alert("Vode nimajo!");
+            return;
+        }
+
+        const found = this.isNodeInFront(scene);
+        const terrainCell = this.getTerrainCell(scene);
+
+        if (found instanceof Seed && terrainCell != null && this.waterInLiters > 0) {
+            const randomRotate = (Math.round(Math.random()) % (2 * Math.PI));
+            const flowerPick = Math.round(Math.random()) + 2;
             scene.replaceNode(found, builder.createNode(
                 {
                     "type": "flower",
@@ -182,27 +219,51 @@ export default class Player extends Node {
                         "min": [-0.5, -0.1, -0.5],
                         "max": [0.5, 0.1, 0.5]
                     },
-                    "translation": [found.translation[0], 1, found.translation[2]],
+                    "translation": [found.translation[0], terrainCell.translation[1] + terrainCell.scale[1], found.translation[2]],
                     "rotation": [0, randomRotate, 0],
                     "scale": [0.3, 0.3, 0.3]
                 }
             ));
-            this.hasWater = false;
+            this.waterInLiters--;
+            document.getElementById("water").setAttribute("value", this.waterInLiters);
             renderer.prepare(scene);
         }
     }
 
-    isNodeInFront(scene) {
-        let pointerX = this.translation[0] - 2 * Math.sin(this.rotation[1]);
-        let pointerY = this.translation[2] - 2 * Math.cos(this.rotation[1]);
+    actionKeySpace() {
+        // jump, very simple but not looking smooth at all :)
+        this.translation[1] += 3;
+    }
 
+    isNodeInFront(scene) {
+        const pointerX = this.translation[0] - 2 * Math.sin(this.rotation[1]);
+        const pointerY = this.translation[2] - 2 * Math.cos(this.rotation[1]);
         let found = null;
         scene.nodes.forEach(node => {
-            if (pointerX <= node.translation[0] + node.scale[0] &&
-                pointerX >= node.translation[0] - node.scale[0] &&
-                pointerY <= node.translation[2] + node.scale[2] &&
-                pointerY >= node.translation[2] - node.scale[2]) {
-                found = node;
+            if (!(node instanceof TerrainCell) && !(node instanceof Skybox)){
+                if (pointerX <= node.translation[0] + node.scale[0] &&
+                    pointerX >= node.translation[0] - node.scale[0] &&
+                    pointerY <= node.translation[2] + node.scale[2] &&
+                    pointerY >= node.translation[2] - node.scale[2]) {
+                    found = node;
+                }
+            }
+        });
+        return found;
+    }
+
+    getTerrainCell(scene) {
+        const pointerX = this.translation[0] - 2 * Math.sin(this.rotation[1]);
+        const pointerY = this.translation[2] - 2 * Math.cos(this.rotation[1]);
+        let found = null;
+        scene.nodes.forEach(node => {
+            if (node instanceof TerrainCell){
+                if (pointerX <= node.translation[0] + node.scale[0] &&
+                    pointerX >= node.translation[0] - node.scale[0] &&
+                    pointerY <= node.translation[2] + node.scale[2] &&
+                    pointerY >= node.translation[2] - node.scale[2]) {
+                    found = node;
+                }
             }
         });
         return found;
@@ -215,5 +276,5 @@ Player.defaults = {
     maxSpeed         : 3,
     friction         : 0.2,
     acceleration     : 20,
-    hasWater         : false
+    waterInLiters    : 3
 };
