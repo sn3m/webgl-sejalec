@@ -1,6 +1,6 @@
 import Utils from './Utils.js';
 import Node from './Node.js';
-import Score from "./Score";
+import Score from "./Score.js";
 
 const mat4 = glMatrix.mat4;
 const vec3 = glMatrix.vec3;
