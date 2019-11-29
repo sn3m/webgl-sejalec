@@ -28,6 +28,14 @@
       ]
     },
     {
+      "type": "simpleai",
+      "mesh": 4,
+      "texture": 0,
+      "translation": [0, -30, 0],
+      "ignoreCollision": true,
+      "invisible": true
+    },
+    {
       "type": "skybox",
       "mesh": 5,
       "texture": 5,

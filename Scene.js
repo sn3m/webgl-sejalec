@@ -14,6 +14,10 @@ export default class Scene {
         return add;
     }
 
+    deleteNode(del) {
+        this.nodes.splice(this.nodes.indexOf(del), 1);
+    }
+
     traverse(before, after) {
         this.nodes.forEach(node => node.traverse(before, after));
     }

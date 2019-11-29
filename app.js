@@ -6,6 +6,7 @@ import Camera from './Camera.js';
 import SceneLoader from './SceneLoader.js';
 import SceneBuilder from './SceneBuilder.js';
 import Player from "./Player.js";
+import SimpleAI from "./SimpleAI.js";
 
 class App extends Application {
 
@@ -36,9 +37,15 @@ class App extends Application {
         // Find first camera.
         this.camera = null;
         this.player = null;
+        this.simpleAI = null;
         this.scene.traverse(node => {
             if (node instanceof Player) {
                 this.player = node;
+            }
+        });
+        this.scene.traverse(node => {
+            if (node instanceof SimpleAI) {
+                this.simpleAI = node;
             }
         });
 
@@ -75,6 +82,10 @@ class App extends Application {
 
         if (this.physics) {
             this.physics.update(dt);
+        }
+
+        if (this.simpleAI){
+            this.simpleAI.update(this.scene, this.player);
         }
     }
 
