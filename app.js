@@ -2,7 +2,6 @@ import Application from './Application.js';
 
 import Renderer from './Renderer.js';
 import Physics from './Physics.js';
-import Camera from './Camera.js';
 import SceneLoader from './SceneLoader.js';
 import SceneBuilder from './SceneBuilder.js';
 import Player from "./Player.js";

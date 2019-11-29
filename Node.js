@@ -65,5 +65,4 @@ Node.defaults = {
         min: [0, 0, 0],
         max: [0, 0, 0],
     },
-    ignoreCollision: false
 };
