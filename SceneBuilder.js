@@ -31,7 +31,7 @@ export default class SceneBuilder {
                 const mesh = new Mesh(this.spec.meshes[spec.mesh]);
                 const texture = this.spec.textures[spec.texture];
                 let player = new Player(mesh, texture, spec);
-                player.addChild(new Camera(spec.children[0]))
+                player.addChild(new Camera(spec.children[0]));
                 return player;
             }
             default: return new Node(spec);
