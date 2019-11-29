@@ -1,5 +1,6 @@
 import Utils from './Utils.js';
 import Node from './Node.js';
+import Model from "./Model.js";
 
 const mat4 = glMatrix.mat4;
 const vec3 = glMatrix.vec3;
@@ -65,26 +66,59 @@ export default class Player extends Node {
         // 5: put flower in front of player
         if (this.keys['KeyF']) {
 
-            let flowerPick = Math.round(Math.random()) + 2;
-            let randomRotate = (Math.round(Math.random()) % (2 * Math.PI));
             let rozaX = c.translation[0] - 2 * Math.sin(c.rotation[1]);
             let rozaY = c.translation[2] - 2 * Math.cos(c.rotation[1]);
 
-            scene.addNode(builder.createNode(
-                {
-                    "type": "model",
-                    "mesh": flowerPick,
-                    "texture": flowerPick,
-                    "aabb": {
-                        "min": [-0.5, -0.1, -0.5],
-                        "max": [0.5, 0.1, 0.5]
-                    },
-                    "translation": [rozaX, 1, rozaY],
-                    "rotation": [0, randomRotate, 0],
-                    "scale": [0.3, 0.3, 0.3]
+            let found = null;
+            scene.nodes.forEach(node => {
+                if (node instanceof Model){
+                    let checkX = node.translation[0];
+                    let checkY = node.translation[2];
+                    if (rozaX <= checkX + 1 &&
+                        rozaX >= checkX - 1 &&
+                        rozaY <= checkY + 1 &&
+                        rozaY >= checkY - 1){
+                        found = node;
+                    }
                 }
-            ));
+            });
+            let randomRotate = (Math.round(Math.random()) % (2 * Math.PI));
+
+            if (found == null){
+                let flowerPick = Math.round(Math.random()) + 2;
+                scene.addNode(builder.createNode(
+                    {
+                        "type": "model",
+                        "mesh": 2,
+                        "texture": 2,
+                        "aabb": {
+                            "min": [-0.5, -0.1, -0.5],
+                            "max": [0.5, 0.1, 0.5]
+                        },
+                        "translation": [rozaX, 1, rozaY],
+                        "rotation": [0, randomRotate, 0],
+                        "scale": [0.3, 0.3, 0.3]
+                    }
+                ));
+            }
+            else {
+                scene.replaceNode(found, builder.createNode(
+                    {
+                        "type": "model",
+                        "mesh": 3,
+                        "texture": 3,
+                        "aabb": {
+                            "min": [-0.5, -0.1, -0.5],
+                            "max": [0.5, 0.1, 0.5]
+                        },
+                        "translation": [found.translation[0], 1, found.translation[2]],
+                        "rotation": [0, randomRotate, 0],
+                        "scale": [0.3, 0.3, 0.3]
+                    }
+                ));
+            }
             renderer.prepare(scene);
+
         }
 
     }
