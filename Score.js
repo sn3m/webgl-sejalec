@@ -15,6 +15,7 @@ export default class Score {
         this.num_flowers = 0;                   // number of all flowers
         this.num_tiles_planted = 0;             // number of tiles with flowers on them
         this.allow_updates = true;              // prevents score updates after the game is over
+        this.difficulty = 0.1;                  // tells how much percentage of tiles must have flowers to win
 
         this.points = 1;
         this.lost_flowers = 0;
@@ -46,7 +47,7 @@ export default class Score {
             this.percentage = 0;
             this.value = 0;
         } else {
-            this.percentage = Math.min(Math.floor(this.num_flowers*100/(this.num_tiles*0.80)), 100);
+            this.percentage = Math.min(Math.floor(this.num_flowers*100/(this.num_tiles*this.difficulty)), 100);
             this.value = Math.max(0, this.num_flowers*this.points - this.lost_flowers*this.penalty);
         }
         this.display();
@@ -60,6 +61,7 @@ export default class Score {
             // the game has been won
             var tmp = document.getElementById("game_won_text");
             tmp.innerHTML = '<div class="endgame_overlay"><div class="box"><p>YOU WIN!!!</p><p>Your score: ' + this.value + '</p></div></div>';
+            this.allow_updates = false;
         }
     }
 }
