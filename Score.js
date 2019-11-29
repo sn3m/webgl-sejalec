@@ -14,6 +14,7 @@ export default class Score {
         this.num_tiles = tiles_x*tiles_y;       // number of all tiles
         this.num_flowers = 0;                   // number of all flowers
         this.num_tiles_planted = 0;             // number of tiles with flowers on them
+        this.allow_updates = true;              // prevents score updates after the game is over
 
         this.points = 1;
         this.lost_flowers = 0;
@@ -26,14 +27,18 @@ export default class Score {
     }
 
     increase() {
-        this.num_flowers++;
-        this.evaluate();
+        if(this.allow_updates) {
+            this.num_flowers++;
+            this.evaluate();
+        }
     }
 
     decrease() {
-        this.num_flowers--;
-        this.lost_flowers++;
-        this.evaluate();
+        if(this.allow_updates) {
+            this.num_flowers--;
+            this.lost_flowers++;
+            this.evaluate();
+        }
     }
 
     evaluate() {
@@ -54,7 +59,7 @@ export default class Score {
         if(this.percentage >= 100) {
             // the game has been won
             var tmp = document.getElementById("game_won_text");
-            tmp.innerHTML = '<div class="endgame_overlay"><div class="box">YOU WIN!!!</div></div>';
+            tmp.innerHTML = '<div class="endgame_overlay"><div class="box"><p>YOU WIN!!!</p><p>Your score: ' + this.value + '</p></div></div>';
         }
     }
 }
