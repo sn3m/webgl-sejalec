@@ -14,6 +14,7 @@ export default class Score {
         this.num_tiles = tiles_x*tiles_y;       // number of all tiles
         this.num_flowers = 0;                   // number of all flowers
         this.num_tiles_planted = 0;             // number of tiles with flowers on them
+        this.difficulty = 0.1;
 
         this.points = 1;
         this.lost_flowers = 0;
@@ -41,7 +42,7 @@ export default class Score {
             this.percentage = 0;
             this.value = 0;
         } else {
-            this.percentage = Math.min(Math.floor(this.num_flowers*100/(this.num_tiles*0.80)), 100);
+            this.percentage = Math.min(Math.floor(this.num_flowers*100/(this.num_tiles*this.difficulty)), 100);
             this.value = Math.max(0, this.num_flowers*this.points - this.lost_flowers*this.penalty);
         }
         this.display();
