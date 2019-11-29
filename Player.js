@@ -229,7 +229,7 @@ export default class Player extends Node {
         // water the seed
 
         if (this.waterInLiters === 0) {
-            alert("Vode nimajo!");
+            // alert("Vode nimajo!");
             return;
         }
 
