@@ -23,3 +23,33 @@ body {
     left: 20px;
     top: 20px;
 }
+
+/* IE10 */
+.water {
+    color: blue;
+}
+
+/* Firefox */
+.water::-moz-progress-bar {
+    background: blue;
+}
+
+/* Chrome */
+.water::-webkit-progress-value {
+    background: blue;
+}
+
+/* IE10 */
+.flowers {
+    color: green;
+}
+
+/* Firefox */
+.flowers::-moz-progress-bar {
+    background: green;
+}
+
+/* Chrome */
+.flowers::-webkit-progress-value {
+    background: green;
+}
