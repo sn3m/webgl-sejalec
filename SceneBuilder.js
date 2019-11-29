@@ -12,6 +12,7 @@ import Seed from "./Seed.js";
 import WaterWell from "./WaterWell.js";
 import TreeOfLife from "./TreeOfLife.js";
 import Skybox from "./Skybox.js";
+import SimpleAI from "./SimpleAI.js";
 
 export default class SceneBuilder {
 
@@ -57,6 +58,11 @@ export default class SceneBuilder {
                 const mesh = new Mesh(this.spec.meshes[spec.mesh]);
                 const texture = this.spec.textures[spec.texture];
                 return new TreeOfLife(mesh, texture, spec);
+            }
+            case 'simpleai': {
+                const mesh = new Mesh(this.spec.meshes[spec.mesh]);
+                const texture = this.spec.textures[spec.texture];
+                return new SimpleAI(mesh, texture, spec);
             }
             case 'player' : {
                 const mesh = new Mesh(this.spec.meshes[spec.mesh]);
