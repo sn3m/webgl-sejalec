@@ -21,6 +21,8 @@ export default class Score {
 
         this.percentage = 0;
         this.value = 0;
+
+        document.getElementById("game_won_text").innerHTML = '';
     }
 
     increase() {
@@ -51,7 +53,8 @@ export default class Score {
 
         if(this.percentage >= 100) {
             // the game has been won
-            // TODO
+            var tmp = document.getElementById("game_won_text");
+            tmp.innerHTML = '<div class="endgame_overlay"><div class="box">YOU WIN!!!</div></div>';
         }
     }
 }
