@@ -9,6 +9,7 @@ import Scene from './Scene.js';
 import Flower from "./Flower.js";
 import Seed from "./Seed.js";
 import WaterWell from "./WaterWell.js";
+import TreeOfLife from "./TreeOfLife.js";
 
 export default class SceneBuilder {
 
@@ -38,6 +39,11 @@ export default class SceneBuilder {
                 const mesh = new Mesh(this.spec.meshes[spec.mesh]);
                 const texture = this.spec.textures[spec.texture];
                 return new WaterWell(mesh, texture, spec);
+            }
+            case 'treeoflife': {
+                const mesh = new Mesh(this.spec.meshes[spec.mesh]);
+                const texture = this.spec.textures[spec.texture];
+                return new TreeOfLife(mesh, texture, spec);
             }
             case 'player' : {
                 const mesh = new Mesh(this.spec.meshes[spec.mesh]);

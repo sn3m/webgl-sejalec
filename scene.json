@@ -36,6 +36,17 @@
       },
       "translation": [-10, 1.5, -10],
       "scale": [1.5, 1.5, 1.5]
+    },
+    {
+      "type": "treeoflife",
+      "mesh": 3,
+      "texture": 0,
+      "aabb": {
+        "min": [-5, -5, -5],
+        "max": [5, 5, 5]
+      },
+      "translation": [45, 1.5, -50],
+      "scale": [5, 5, 5]
     }
   ],
   "textures": [

@@ -63,9 +63,19 @@ export default class Player extends Node {
             vec3.scale(c.velocity, c.velocity, c.maxSpeed / len);
         }
 
-        // 5: put flower in front of player
+        // 5: put seed in front of player
         if (this.keys['KeyF']) {
-            this.actionKeyFunctions(scene, builder, renderer);
+            this.actionKeyF(scene, builder, renderer);
+        }
+
+        // 6: pick up water
+        if (this.keys['KeyG']){
+            this.actionKeyG(scene, builder, renderer);
+        }
+
+        // 7: water the seed
+        if (this.keys['KeyH']){
+            this.actionKeyH(scene, builder, renderer);
         }
     }
 
@@ -117,24 +127,15 @@ export default class Player extends Node {
         this.keys[e.code] = false;
     }
 
-    actionKeyFunctions(scene, builder, renderer) {
-
-        let pointerX = this.translation[0] - 2 * Math.sin(this.rotation[1]);
-        let pointerY = this.translation[2] - 2 * Math.cos(this.rotation[1]);
-
-        let found = null;
-        scene.nodes.forEach(node => {
-            if (pointerX <= node.translation[0] + node.scale[0] &&
-                pointerX >= node.translation[0] - node.scale[0] &&
-                pointerY <= node.translation[2] + node.scale[2] &&
-                pointerY >= node.translation[2] - node.scale[2]) {
-                found = node;
-            }
-        });
-
-        let randomRotate = (Math.round(Math.random()) % (2 * Math.PI));
+    actionKeyF(scene, builder, renderer) {
+        // is something in front of player
+        // if not add Seed node in front
+        let found = this.isNodeInFront(scene);
 
         if (found == null){
+            let randomRotate = (Math.round(Math.random()) % (2 * Math.PI));
+            let pointerX = this.translation[0] - 2 * Math.sin(this.rotation[1]);
+            let pointerY = this.translation[2] - 2 * Math.cos(this.rotation[1]);
             scene.addNode(builder.createNode(
                 {
                     "type": "seed",
@@ -151,7 +152,26 @@ export default class Player extends Node {
             ));
             renderer.prepare(scene);
         }
-        else if (found instanceof Seed && this.hasWater) {
+    }
+
+    actionKeyG(scene, builder, renderer){
+        // is something in front of player
+        // if WaterWell get water
+        let found = this.isNodeInFront(scene);
+
+        if (found instanceof WaterWell && !this.hasWater){
+            this.hasWater = true;
+        }
+    }
+
+    actionKeyH(scene, builder, renderer) {
+        // is something in front of player
+        // if Seed and player has water
+        // water the seed
+        let found = this.isNodeInFront(scene);
+
+        if (found instanceof Seed && this.hasWater) {
+            let randomRotate = (Math.round(Math.random()) % (2 * Math.PI));
             let flowerPick = Math.round(Math.random()) + 2;
             scene.replaceNode(found, builder.createNode(
                 {
@@ -170,9 +190,22 @@ export default class Player extends Node {
             this.hasWater = false;
             renderer.prepare(scene);
         }
-        else if (found instanceof WaterWell && !this.hasWater){
-            this.hasWater = true;
-        }
+    }
+
+    isNodeInFront(scene) {
+        let pointerX = this.translation[0] - 2 * Math.sin(this.rotation[1]);
+        let pointerY = this.translation[2] - 2 * Math.cos(this.rotation[1]);
+
+        let found = null;
+        scene.nodes.forEach(node => {
+            if (pointerX <= node.translation[0] + node.scale[0] &&
+                pointerX >= node.translation[0] - node.scale[0] &&
+                pointerY <= node.translation[2] + node.scale[2] &&
+                pointerY >= node.translation[2] - node.scale[2]) {
+                found = node;
+            }
+        });
+        return found;
     }
 }
 
