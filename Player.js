@@ -1,18 +1,20 @@
 import Utils from './Utils.js';
 import Node from './Node.js';
+import Score from "./Score";
 
 const mat4 = glMatrix.mat4;
 const vec3 = glMatrix.vec3;
 
 export default class Player extends Node {
 
-    constructor(mesh, image, options) {
+    constructor(mesh, image, options, size) {
         super(options);
         Utils.init(this, this.constructor.defaults, options);
 
         this.mesh = mesh;
         this.image = image;
 
+        this.score = new Score(size, size);
 
         this.mousemoveHandler = this.mousemoveHandler.bind(this);
         this.keydownHandler = this.keydownHandler.bind(this);
@@ -118,5 +120,6 @@ Player.defaults = {
     mouseSensitivity : 0.002,
     maxSpeed         : 3,
     friction         : 0.2,
-    acceleration     : 20
+    acceleration     : 20,
+    score            : null
 };
