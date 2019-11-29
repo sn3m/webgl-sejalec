@@ -4,7 +4,6 @@ import Seed from "./Seed.js";
 import WaterWell from "./WaterWell.js";
 import TerrainCell from "./TerrainCell.js";
 import Skybox from "./Skybox.js";
-import TreeOfLife from "./TreeOfLife.js";
 import Score from "./Score.js";
 
 const mat4 = glMatrix.mat4;
@@ -23,11 +22,9 @@ export default class Player extends Node {
         this.enableKeyJ = true;
         this.enableKeyK = true;
         this.enableKeyL = true;
-        this.konec = false;
 
         this.score = new Score(size, size);
         this.score.display();
-
 
         this.mousemoveHandler = this.mousemoveHandler.bind(this);
         this.keydownHandler = this.keydownHandler.bind(this);
@@ -110,30 +107,6 @@ export default class Player extends Node {
             setTimeout(function(){
                 c.enableKeySpace = true;
             }, 1000);
-        }
-
-        if (this.numFlowers > 10 && !this.konec){
-            this.konec = true;
-            alert("ZMAGA!");
-            scene.nodes.forEach(node => {
-                if(node instanceof TreeOfLife){
-                    let addedNode = scene.replaceNode(node, builder.createNode(
-                        {
-                            "type": "treeoflife",
-                            "mesh": 3,
-                            "texture": 3,
-                            "aabb": {
-                                "min": [-2.5, -2.5, -2.5],
-                                "max": [2.5, 100, 2.5]
-                            },
-                            "translation": [node.translation[0], node.translation[1], node.translation[2]],
-                            "rotation": [0, node.rotation[1], 0],
-                            "scale": [node.scale[0], node.scale[1], node.scale[2]]
-                        }
-                    ));
-                    renderer.renderSingleNode(addedNode);
-                }
-            })
         }
     }
 
@@ -256,9 +229,8 @@ export default class Player extends Node {
                 }
             ));
             this.waterInLiters--;
-            this.numFlowers++;
+            this.score.increase();
             document.getElementById("water").setAttribute("value", this.waterInLiters);
-            document.getElementById("flowers").setAttribute("value", this.numFlowers);
             renderer.renderSingleNode(addedNode);
         }
     }
