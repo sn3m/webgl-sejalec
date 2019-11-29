@@ -17,6 +17,8 @@ class App extends Application {
         this.startTime = this.time;
         this.aspect = 1;
 
+        this.score = 10;
+
         this.pointerlockchangeHandler = this.pointerlockchangeHandler.bind(this);
         document.addEventListener('pointerlockchange', this.pointerlockchangeHandler);
 
@@ -99,4 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const app = new App(canvas);
     const gui = new dat.GUI();
     gui.add(app, 'enableCamera');
+    gui.add(app, 'score', 0, 100);
+
 });
